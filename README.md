@@ -54,11 +54,22 @@ Arduino library for controlling 3-phase brushless DC motors using the Toshiba **
 | DIR             | 3            | Rotation direction  |
 | SPD             | 9            | PWM speed input     |
 | CMO             | A0           | Current monitor     |
+| 3.3V            | 3.3V         | 3.3V voltage supply |
+| 5V              | 5V           | 5V voltage supply   |
 | INT (ALR/FG)    | optional     | Fault or speed flag |
+| GND             | GND          | Ground              |
 
 ---
 
 ## 🚀 Basic Usage Example
-
+To control the motor speed, adjust the `max_rpm` value in setSpeedSlope function. For our case, 50 and 200 are the minimum and maximum values we can set respectively.
 ```cpp
+//setSpeedSlope(uint16_t max_rpm, uint16_t start_rpm, float start_duty, float max_duty)
+motor.setSpeedSlope(200, 50, 10.0f, 100.0f);
+
+
+
+
+
+
 
