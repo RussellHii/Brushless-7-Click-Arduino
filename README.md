@@ -1,64 +1,61 @@
 # Brushless-7-Click-Arduino
-This repo is mainly about the library to integrate the brushess 7 click with arduino.
 
-![Circuit Connection Diagram](Circuit diagram.png])  
-*Example connection diagram for TC78B009FTG motor driver*
+Arduino library for controlling 3-phase brushless DC motors using the Toshiba **TC78B009FTG** driver via I²C and PWM. Supports speed control, soft-start, protection settings, and real-time diagnostics.
 
-Arduino library for controlling brushless motors via I2C and PWM, designed for motor drivers like the Toshiba TC78B009FTG. Provides comprehensive control over motor parameters and protection features.
+![Circuit Connection Diagram](Circuit%20diagram.png)
+*Example wiring for Brushless 7 Click and Arduino Uno R4 Minima*
 
-## Features
-- 📡 I2C configuration (100kHz default)
-- 🎛️ PWM speed control (up to 23.4kHz)
-- ⚙️ Multiple control modes (Duty/RPM/Stop)
-- 🔄 Configurable soft-start and speed slope
-- ⚠️ Over-current/thermal protection
-- 📊 Current monitoring & error reporting
+---
 
-## Hardware Requirements
-- TB67B000AHG or compatible 3-phase brushless driver
-- Arduino Uno/Mega/Nano
-- Brushless motor (12V-42V suggested)
-- Power supply (match motor specs)
-- Basic connection components:
-  - 10kΩ resistor (SBY pin pull-up)
-  - 0.1μF capacitor (VM pin decoupling)
+## 📦 Features
 
-## Installation
-1. Download [Brushless7.zip](https://github.com/yourusername/Brushless7/archive/refs/heads/main.zip)
-2. Arduino IDE: `Sketch > Include Library > Add .ZIP Library`
-3. Install dependencies:
-   - [Arduino Wire library](https://www.arduino.cc/en/Reference/Wire) (built-in)
-   - [PWM Library](https://github.com/yourusername/PWM) (included in examples)
+- 📡 **I²C communication** (configurable registers)
+- 🎛️ **PWM-based speed control** (default 23.4 kHz on pin 9)
+- ⚙️ **Control modes**: duty-based, rpm, stop
+- 🔄 **Startup configuration**: soft-start ramp, brake setup, closed-loop support
+- ⚠️ **Protection features**: overcurrent detection, alert monitoring
+- 📊 **Diagnostics**: current monitor and FG feedback for RPM measurement
 
-## Basic Usage
+---
+
+## 🛠️ Hardware Requirements
+
+- ✔️ **Brushless 7 Click board** (TC78B009FTG)
+- ✔️ Arduino Uno R4 Minima (5 V logic recommended)
+- ✔️ 3-phase brushless DC motor (12 V)
+- ✔️ External 11–27 V VM power supply
+- ⚠️ Ensure correct switch settings on the Click board:
+  - **SW2**: Upper position (analog voltage/pwm duty), Lower position (I²C)
+  - **SW3/SW4**: I²C address (default: `0x29`)
+
+---
+
+## 📂 Installation
+
+1. Download this repository as `.zip`  
+   [Download ZIP](https://github.com/yourusername/Brushless7/archive/refs/heads/main.zip)
+2. Go to `Documents > Arduino/libraries ` to create a folder (brushless7)
+3. Put the Brushless7.cpp and Brushless7.h files in this folder
+4. Go to `Documents > Arduino/libraries/examples ` to create a folder (brushless7_example)
+5. Put the brushless7_example.ino file in this folder
+6. Open brushless7_example.ino file on Arduino IDE and upload it to the Arduino.
+
+---
+
+## 🔌 Pinout
+
+| TC78B009FTG Pin | Arduino Pin | Description         |
+|-----------------|--------------|---------------------|
+| SDA/SCL         | SDA/SCL      | I²C communication   |
+| SBY             | 4            | Standby control     |
+| DIR             | 3            | Rotation direction  |
+| SPD             | 9            | PWM speed input     |
+| CMO             | A0           | Current monitor     |
+| INT (ALR/FG)    | optional     | Fault or speed flag |
+
+---
+
+## 🚀 Basic Usage Example
+
 ```cpp
-#include <Brushless7.h>
 
-// Pin definitions
-#define SBY_PIN 4
-#define DIR_PIN 3
-#define SPD_PIN 9
-#define CMO_PIN A0
-#define I2C_ADDR 0x29
-
-Brushless7 motor(SBY_PIN, I2C_ADDR, SPD_PIN, DIR_PIN, CMO_PIN);
-
-void setup() {
-  Serial.begin(115200);
-  motor.begin();
-  
-  // Essential configurations
-  motor.configureDefault();
-  motor.configureBrake();
-  motor.configureOCP();
-  
-  motor.controlModeSet(CTRL_DUTY);
-  motor.setStartDuty(10.0f);
-  motor.setMaxDuty(100.0f);
-}
-
-void loop() {
-  motor.setSpeedPWM(200); // 0-255 PWM value
-  motor.printRotationSpeedHz();
-  delay(1000);
-}
