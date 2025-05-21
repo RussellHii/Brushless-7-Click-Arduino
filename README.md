@@ -3,7 +3,7 @@
 Arduino library for controlling 3-phase brushless DC motors using the Toshiba **TC78B009FTG** driver via I²C and PWM. Supports speed control, soft-start, protection settings, and real-time diagnostics.
 
 <p align="center">
-  <img src="Circuit diagram.png" alt="Circuit Diagram" width="400">
+  <img src="Circuit diagram.png" alt="Circuit Diagram" width="700">
 </p>
 
 *Example wiring for Brushless 7 Click and Arduino Uno R4 Minima*
